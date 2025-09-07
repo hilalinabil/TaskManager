@@ -1,19 +1,21 @@
 const express = require("express");
-const cors = require("cors");
 const dotenv = require("dotenv");
+const cors = require("cors");
 const connectDB = require("./config/db");
 
 dotenv.config();
 connectDB();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
-app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 
-app.get("/api/health", (_, res) => res.json({ ok: true }));
-
-
+// Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/tasks", require("./routes/tasks"));
+
+app.get("/", (req, res) => {
+  res.send("Task Manager API is running...");
+});
 
 module.exports = app;
